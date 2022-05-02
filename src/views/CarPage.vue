@@ -1,7 +1,7 @@
 <template>
-  <div class="form" v-if="viewForm">
+  <div class="form" v-if="this.viewForm">
     <br>
-    <formManage :input="headColumn" :item="car"></formManage>
+    <formManage :input="headColumn"></formManage>
   </div>
   <div class="cars" v-else>
     <tableCustom
@@ -10,17 +10,16 @@
         msg="Auto"
         :items="this.items"
         :button="button"
-        :deleteItem="deleteCar"
         :newItem="newCar"
-        :editItem="editCar"/>
+        :editItem="editCar"
+        :deleteItem="deleteCar"/>
   </div>
 </template>
 
 <script>
 import tableCustom from '@/components/tableCustom.vue'
-import axios from "axios";
 import formManage from "@/components/formManage";
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 
 export default {
@@ -31,8 +30,6 @@ export default {
   },
   data() {
     return {
-      viewForm: null,
-      car: null,
       headColumn: [
         {head: 'TARGA', key: 'licensePlate', type: 'text', verify: 'Inserisci la targa'},
         {head: 'MODELLO', key: 'model', type: 'text', verify: 'Inserisci il modello'},
@@ -48,38 +45,19 @@ export default {
     };
   },
   methods: {
-    deleteCar: function (id) {
-      axios.delete(`http://localhost:8081/api/cars/delete/` + id)
-          .then(response => {
-            this.getCars()
-            console.log(response);
-          });
-    },
-    newCar: function () {
-      this.viewForm = 'newItem';
-      this.car = {
-        licensePlate: '',
-        model: '',
-        type: '',
-        year: '',
-        manufacturer: ''
-      }
-    },
-    editCar: function (id) {
-      this.viewForm = 'editItem';
-      axios.get('http://localhost:8081/api/cars/car/' + id)
-          .then(item => {
-            this.car = item.data;
-          })
-          .catch(error => console.log(error))
-    }
+    ...mapActions([
+      'editCar',
+      'getCars',
+      'deleteCar',
+      'newCar'
+    ])
   },
   computed: mapState([
     'items',
+    'viewForm'
   ]),
   mounted() {
-    this.$store.dispatch('getCars')
-    console.log(this.items)
+    this.getCars()
   },
 }
 </script>

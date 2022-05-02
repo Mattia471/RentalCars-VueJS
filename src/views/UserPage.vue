@@ -1,27 +1,26 @@
 <template>
-  <div class="form" v-if="viewForm">
+  <div class="form" v-if="this.viewForm">
     <br>
-    <formManage :input="headColumn" :item="user"></formManage>
+    <formManage :input="headColumn"></formManage>
   </div>
-  <div class="user" v-else>
+  <div class="user container" v-else>
     <tableCustom
         className="text-dark"
         :headColumn="headColumn"
         msg="Utenti"
         :items="this.items"
         :button="button"
-        :deleteItem="deleteUser"
         :newItem="newUser"
-        :editItem="editUser"/>
+        :editItem="editUser"
+        :deleteItem="deleteUser"/>
   </div>
 </template>
 
 <script>
 
 import tableCustom from '@/components/tableCustom.vue'
-import axios from "axios";
 import formManage from "@/components/formManage";
-import { mapState } from 'vuex';
+import {mapActions, mapState} from 'vuex';
 
 export default {
   name: 'UsersPage',
@@ -31,7 +30,6 @@ export default {
   },
   data() {
     return {
-      viewForm: null,
       action: null,
       user: null,
       headColumn: [
@@ -48,37 +46,19 @@ export default {
     };
   },
   methods: {
-    deleteUser: function (id) {
-      axios.delete(`http://localhost:8081/api/users/delete/` + id)
-          .then(response => {
-            this.getUsers()
-            console.log(response);
-          });
-    },
-    newUser: function () {
-      this.viewForm = 'view';
-      this.user = {
-        name: '',
-        surname: '',
-        email: '',
-        birthdate: ''
-      }
-    },
-    editUser: function (id) {
-      this.viewForm = 'view';
-      axios.get('http://localhost:8081/api/users/id/' + id)
-          .then(item => {
-            this.user = item.data;
-          })
-          .catch(error => console.log(error))
-    }
+    ...mapActions([
+      'editUser',
+      'getUsers',
+      'deleteUser',
+      'newUser'
+    ])
   },
   computed: mapState([
-      'items',
+    'items',
+    'viewForm',
   ]),
   mounted() {
-    this.$store.dispatch('getUsers')
-    console.log(this.items)
+    this.getUsers()
   },
 }
 </script>

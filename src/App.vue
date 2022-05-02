@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-secondary" v-if="!this.viewForm">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">VueJS</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,3 +19,14 @@
   </nav>
   <router-view/>
 </template>
+<script>
+
+import { mapState} from 'vuex';
+
+export default {
+
+  computed: mapState([
+    'viewForm'
+  ])
+}
+</script>
