@@ -19,7 +19,7 @@
 <script>
 import tableCustom from '@/components/tableCustom.vue'
 import formManage from "@/components/formManage";
-import {mapActions, mapState} from "vuex";
+import {mapState} from "vuex";
 
 
 export default {
@@ -45,19 +45,14 @@ export default {
     };
   },
   methods: {
-    ...mapActions([
-      'editCar',
-      'getCars',
-      'deleteCar',
-      'newCar'
-    ])
+
   },
-  computed: mapState([
-    'items',
-    'viewForm'
-  ]),
+  computed: mapState({
+    items: state => state.cars.items
+  }),
   mounted() {
-    this.getCars()
+    this.$store.dispatch("cars/getAllCars")
   },
+
 }
 </script>

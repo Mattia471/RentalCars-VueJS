@@ -20,7 +20,7 @@
 
 import tableCustom from '@/components/tableCustom.vue'
 import formManage from "@/components/formManage";
-import {mapActions, mapState} from 'vuex';
+import {mapState} from 'vuex';
 
 export default {
   name: 'UsersPage',
@@ -32,6 +32,7 @@ export default {
     return {
       action: null,
       user: null,
+      itemsIterator:[],
       headColumn: [
         {head: 'NOME', key: 'name', type: 'text', verify: 'Inserisci il nome dell\'utente'},
         {head: 'COGNOME', key: 'surname', type: 'text', verify: 'Inserisci il cognome dell\'utente'},
@@ -46,19 +47,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions([
-      'editUser',
-      'getUsers',
-      'deleteUser',
-      'newUser'
-    ])
+
   },
-  computed: mapState([
-    'items',
-    'viewForm',
-  ]),
+  computed: mapState({
+    items: state => state.users.items
+}),
   mounted() {
-    this.getUsers()
+    this.$store.dispatch("users/getAllUsers")
   },
 }
 </script>

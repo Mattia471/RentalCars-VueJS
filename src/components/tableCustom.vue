@@ -3,10 +3,16 @@
     <hr>
     <div class="row">
       <div class="col-4">
-        <button :class="button[0].class" @click="newItem">{{ button[0].value }}</button>
+        <button
+            :class="button[0].class"
+            @click="newItem">
+          {{ button[0].value }}
+        </button>
       </div>
       <div class="col-8">
-        <input type="text" class="form-control" placeholder="Inserisci valore da ricercare">
+        <input type="text"
+               class="form-control"
+               placeholder="Inserisci valore da ricercare">
       </div>
     </div>
     <hr>
@@ -39,6 +45,7 @@
 <script>
 
 
+
 import { mapState} from "vuex";
 
 export default {
@@ -47,8 +54,8 @@ export default {
   props: {
     msg: String,
     headColumn: Array,
-    items: Object,
     button: Array,
+    items:[],
     newItem: function () {},
     editItem:function () {},
     deleteItem:function () {},
@@ -61,8 +68,10 @@ export default {
   methods: {
 
   },
+  mounted() {
+  },
   computed: mapState([
-    'items',
+
   ])
 }
 
