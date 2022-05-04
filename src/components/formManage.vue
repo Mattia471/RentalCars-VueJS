@@ -1,7 +1,7 @@
 <template>
   <div class="container" v-if="this.item" style="width: 50%">
     <div class="card bg-light text-center" style="padding: 20px">
-      <form autocomplete="off">
+      <form autocomplete="off" v-on:submit.prevent="submitForm">
         <div class="form-group" v-for="row in input" :key="row">
           <label>{{ row.head }}</label>
           <input :type="row.type" class="form-control" v-model="item[row.key]"
@@ -13,9 +13,6 @@
           <div class="col">
             <button type="submit" class="btn btn-success form-control">Salva</button>
           </div>
-          <div class="col">
-            <button class="btn btn-danger form-control" @click="goBack">Indietro</button>
-          </div>
         </div>
       </form>
     </div>
@@ -23,24 +20,47 @@
 </template>
 
 <script>
-import {mapMutations, mapState} from "vuex";
+import {mapState} from "vuex";
+import axios from "axios";
 
 export default {
   name: "formManage",
   props: {
-    input: Array,
+    input: [],
     test: null,
+    item: []
   },
-  computed: mapState([
-    "item"
-  ]),
+  computed: mapState({}),
   methods: {
-    ...mapMutations([
-      'goBack'
-    ]),
-    goBack: function () {
-      this.$store.commit('goBack')
-    }
+    submitForm(){
+      if(this.item.id){
+        axios.put('http://localhost:8081/api/users/edit', this.item)
+            .then(() => {
+              alert("modificato utente" + this.item)
+              location.replace('/')
+              //Perform Success Action
+            })
+            .catch((error) => {
+              console.log(error)
+              // error.response.status Check status code
+            }).finally(() => {
+          //Perform action in always
+        });
+      }else {
+        axios.post('http://localhost:8081/api/users/add', this.item)
+            .then(() => {
+              alert("aggiunto nuovo utente" + this.item)
+              location.replace('/')
+              //Perform Success Action
+            })
+            .catch((error) => {
+              console.log(error)
+              // error.response.status Check status code
+            }).finally(() => {
+          //Perform action in always
+        });
+      }
+    },
   },
   mounted() {
     console.log(this.item)

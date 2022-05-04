@@ -1,7 +1,7 @@
 <template>
   <div class="form" v-if="this.viewForm">
     <br>
-    <formManage :input="headColumn"></formManage>
+    <formManage :input="headColumn" :item="item"></formManage>
   </div>
   <div class="user container" v-else>
     <tableCustom
@@ -10,9 +10,9 @@
         msg="Utenti"
         :items="this.items"
         :button="button"
-        :newItem="newUser"
-        :editItem="editUser"
-        :deleteItem="deleteUser"/>
+        :newItem="this.new"
+        :editItem="this.edit"
+        :deleteItem="this.delete"/>
   </div>
 </template>
 
@@ -20,7 +20,7 @@
 
 import tableCustom from '@/components/tableCustom.vue'
 import formManage from "@/components/formManage";
-import {mapState} from 'vuex';
+import {mapActions, mapState} from 'vuex';
 
 export default {
   name: 'UsersPage',
@@ -32,13 +32,6 @@ export default {
     return {
       action: null,
       user: null,
-      itemsIterator:[],
-      headColumn: [
-        {head: 'NOME', key: 'name', type: 'text', verify: 'Inserisci il nome dell\'utente'},
-        {head: 'COGNOME', key: 'surname', type: 'text', verify: 'Inserisci il cognome dell\'utente'},
-        {head: 'EMAIL', key: 'email', type: 'email', verify: 'Inserisci l\'email dell\'utente'},
-        {head: 'DATA DI NASCITA', key: 'birthdate', type: 'date', verify: 'Inserisci la data di nascita dell\'utente'},
-      ],
       button: [
         {action: 'new', class: 'btn btn-success form-control', value: 'Crea Utente'},
         {action: 'edit', class: 'btn btn-warning form-control', value: 'Modifica Utente'},
@@ -47,13 +40,21 @@ export default {
     };
   },
   methods: {
-
+    ...mapActions({
+      new: 'users/newUser',
+      edit: 'users/editUser',
+      viewUser: 'users/getAllUsers',
+      delete: 'users/deleteUser'
+    })
   },
   computed: mapState({
-    items: state => state.users.items
-}),
+    items: state => state.users.items,
+    headColumn: state => state.users.headColumn,
+    viewForm: state => state.users.viewForm,
+    item: state => state.users.item
+  }),
   mounted() {
-    this.$store.dispatch("users/getAllUsers")
+    this.viewUser()
   },
 }
 </script>

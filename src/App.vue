@@ -25,8 +25,8 @@ import { mapState} from 'vuex';
 
 export default {
 
-  computed: mapState([
-    'viewForm'
-  ])
+  computed: mapState({
+    viewForm: state => state.global.viewForm,
+  }),
 }
 </script>

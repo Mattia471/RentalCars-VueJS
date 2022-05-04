@@ -33,7 +33,10 @@
         </template>
         <th v-for="btn in button" :key="btn">
           <button v-if="btn.action==='edit'" :class="btn.class" @click="this.editItem(item.id)">{{ btn.value }}</button>
-          <button v-if="btn.action==='delete'" :class="btn.class" @click="this.deleteItem(item.id)">{{ btn.value }}</button>
+          <button v-if="btn.action==='delete'" :class="btn.class" @click="this.deleteItem(item.id)">{{
+              btn.value
+            }}
+          </button>
         </th>
       </tr>
       </tbody>
@@ -45,8 +48,7 @@
 <script>
 
 
-
-import { mapState} from "vuex";
+import {mapState} from "vuex";
 
 export default {
   name: 'tableCustom',
@@ -55,24 +57,24 @@ export default {
     msg: String,
     headColumn: Array,
     button: Array,
-    items:[],
-    newItem: function () {},
-    editItem:function () {},
-    deleteItem:function () {},
+    items: [],
+    newItem: function () {
+    },
+    editItem: function () {
+    },
+    deleteItem: function () {
+    },
   },
   data() {
     return {
       action: null,
     }
   },
-  methods: {
-
-  },
+  methods: {},
   mounted() {
-  },
-  computed: mapState([
 
-  ])
+  },
+  computed: mapState({})
 }
 
 </script>
